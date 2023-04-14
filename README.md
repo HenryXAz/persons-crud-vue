@@ -1,5 +1,5 @@
 # persons-crud-vue
-CRUD de personas consumiendo API REST
+CRUD de personas con el uso de datos de una  API REST
 
 # Vue 3 + Vite
 
