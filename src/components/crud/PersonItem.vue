@@ -103,18 +103,14 @@ const deletePerson = async (id) => {
       <Button 
         class="bg-indigo-500 text-gray-100 rounded-md h-10"
         type="submit">
-        <template #content>
-          actualizar
-        </template>
+        actualizar
       </Button>
       <Button 
         class="bg-red-500 text-gray-100 rounded-md h-10"
         type="button"
         @click="() => {edit = !edit}"
         >
-        <template #content>
           cancelar
-        </template>
       </Button>
     </template>
     </Form>

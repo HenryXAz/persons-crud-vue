@@ -21,7 +21,7 @@
     :type="props.type"
     @click="click"
   >
-    <slot name="content">
+    <slot>
 
     </slot>
   </button>

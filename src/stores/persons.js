@@ -1,33 +1,55 @@
 import { defineStore } from 'pinia'
+import { reactive} from 'vue'
 
 export const usePersonsStore = defineStore('persons', {
-  state: () => {
-    return {
-      persons: [],
-    }
-  },
+  state: () => ({
+    persons: reactive([])
+  }),
   actions: {
-    async pushData(data) {
-      this.persons.unshift(...data)
+    async getPersons() {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/persons`)
+      this.persons =  [...await response.json()]
     },
-    async editPerson(person) {
-      this.person = person
+    async getPersonById(id) {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/persons/${id}`)
+      return await response.json(0)
+    },  
+    async createPerson(person) {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/persons`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(person),
+      })
+      const newPerson = await response.json()
+      this.persons.unshift(newPerson)
     },
-    updatePerson(personUpdate) {
-      const personFound = this.persons.find(person => person.id === personUpdate.id)
+    async updatePerson(person, id) {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/persons/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(person),
+      })
 
-      if(personFound) {
-        personFound.name = personUpdate.name
-        personFound.profession = personUpdate.profession
-      }
-    } 
-    ,
-    deletePerson(id) {
-      const person = this.persons.find(person => person.id === id)
+      const indexPerson = this.persons.findIndex(person => person.id === id)
 
-      if(person) {
-        this.persons.splice(this.persons.indexOf(person), 1)
+      this.persons[indexPerson] = {
+        id,
+        name: person.name,
+        profession: person.profession,
       }
     },
-  },
+    async removePerson(id) {
+      await fetch(`${import.meta.env.VITE_API_URL}api/persons/${id}`, {
+        method: 'DELETE',
+      })
+      const indexPerson = this.persons.findIndex(person => person.id === id)
+      this.persons.splice(indexPerson, 1)
+    }
+  }
 })

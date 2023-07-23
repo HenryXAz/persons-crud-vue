@@ -5,13 +5,13 @@ import Button from './Button.vue'
 import { onMounted, ref } from 'vue';
 
 
-const localTheme = ref(localStorage.theme )
-  const systemTheme = ref(window.matchMedia('(prefers-color-scheme:dark)').matches)
+const localTheme = ref(localStorage.theme)
+const systemTheme = ref(window.matchMedia('(prefers-color-scheme:dark)').matches)
 
 
 onMounted(() => {
 
-  if(localTheme.value === 'dark' || (!localTheme.value && systemTheme.value)) {
+  if(localStorage.theme === 'dark' || (!localStorage.theme && systemTheme.value)) {
     document.documentElement.classList.add('dark')
     localStorage.theme = 'dark'
   } else {
@@ -31,15 +31,6 @@ const toggleTheme = () => {
     localStorage.theme = 'dark'
     localTheme.value = 'dark'
   }
-
-
-  // if(localTheme.value === 'dark' || (!localTheme.value && systemTheme.value)) {
-  //   document.documentElement.classList.add('dark')
-  //   localStorage.theme = 'light'
-  // } else {
-  //   document.documentElement.classList.remove('dark')
-  //   localStorage.theme = 'dark'
-  // }
 }
 
 </script>
@@ -52,10 +43,8 @@ const toggleTheme = () => {
     <Button
       @click="toggleTheme"
     >
-  <template #content>
     <img v-if="localTheme === 'light'" :src="Moon" alt="cambiar a tema oscuro">
     <img v-if="localTheme === 'dark'" :src="Sun" alt="cambiar a tema claro">
-  </template>
 </Button>
   </div>
 </div>
